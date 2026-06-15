@@ -1,6 +1,6 @@
 import { HydratedDocument, Schema, Types, model } from 'mongoose';
 
-export type DocumentStatus = 'PENDING' | 'ACTIVE' | 'ARCHIVED' | 'UPLOADED' | 'EXTRACTED';
+export type DocumentStatus = 'PENDING' | 'ACTIVE' | 'ARCHIVED' | 'UPLOADED' | 'EXTRACTED' | 'CHUNKED' | 'EMBEDDED';
 
 export interface DocumentAttributes {
   filename: string;
@@ -37,7 +37,7 @@ const documentSchema = new Schema<DocumentWithTimestamps>(
     },
     status: {
       type: String,
-      enum: ['PENDING', 'ACTIVE', 'ARCHIVED', 'UPLOADED', 'EXTRACTED'],
+      enum: ['PENDING', 'ACTIVE', 'ARCHIVED', 'UPLOADED', 'EXTRACTED', 'CHUNKED', 'EMBEDDED'],
       default: 'UPLOADED',
       required: true,
     },

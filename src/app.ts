@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './routes/auth.routes';
 import documentRoutes from './routes/document.routes';
 import healthRoutes from './routes/health.routes';
+import searchRoutes from './routes/search.routes';
 import userRoutes from './routes/user.routes';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
@@ -14,6 +15,7 @@ export const createApp = () => {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/documents', documentRoutes);
+  app.use('/api/search', searchRoutes);
   app.use('/health', healthRoutes);
   app.use('/users', userRoutes);
 
