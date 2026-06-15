@@ -1,5 +1,6 @@
 import express from 'express';
 import authRoutes from './routes/auth.routes';
+import chatRoutes from './routes/chat.routes';
 import documentRoutes from './routes/document.routes';
 import healthRoutes from './routes/health.routes';
 import searchRoutes from './routes/search.routes';
@@ -14,6 +15,7 @@ export const createApp = () => {
   app.use(express.urlencoded({ extended: true }));
 
   app.use('/api/auth', authRoutes);
+  app.use('/api/chat', chatRoutes);
   app.use('/api/documents', documentRoutes);
   app.use('/api/search', searchRoutes);
   app.use('/health', healthRoutes);

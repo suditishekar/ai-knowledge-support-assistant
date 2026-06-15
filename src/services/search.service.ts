@@ -28,13 +28,6 @@ export const searchChunksByQuery = async (
     const queryEmbedding =
       await embeddingProvider.generateEmbedding(normalizedQuery);
 
-    console.log('========================');
-    console.log('Search Query:', normalizedQuery);
-    console.log('Vector Index:', config.vectorSearchIndex);
-    console.log('Embedding Length:', queryEmbedding.length);
-    console.log('First 5 values:', queryEmbedding.slice(0, 5));
-    console.log('========================');
-
     const matches = await Chunk.aggregate<SearchMatch>([
       {
         $vectorSearch: {
