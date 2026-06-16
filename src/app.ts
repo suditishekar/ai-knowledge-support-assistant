@@ -1,4 +1,5 @@
 import express from 'express';
+import adminRoutes from './routes/admin.routes';
 import authRoutes from './routes/auth.routes';
 import chatRoutes from './routes/chat.routes';
 import documentRoutes from './routes/document.routes';
@@ -16,6 +17,7 @@ export const createApp = () => {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/chat', chatRoutes);
+  app.use('/api/admin', adminRoutes);
   app.use('/api/documents', documentRoutes);
   app.use('/api/search', searchRoutes);
   app.use('/health', healthRoutes);

@@ -1,5 +1,7 @@
+import { Types } from 'mongoose';
 import { AppError } from '../middleware/error.middleware';
 import { createChatProvider } from './chat-providers/chat-provider.factory';
+import { createConversation } from './conversation.service';
 import { searchChunksByQuery } from './search.service';
 
 export interface ChatAnswerResult {
@@ -32,6 +34,7 @@ const buildPrompt = (question: string, contextChunks: string[]): string => {
 
 export const generateChatAnswer = async (
   question: string,
+  userId: string,
 ): Promise<ChatAnswerResult> => {
   const normalizedQuestion = question.trim();
 
@@ -40,14 +43,30 @@ export const generateChatAnswer = async (
   }
 
   const searchResult = await searchChunksByQuery(normalizedQuestion);
-  const topChunks = searchResult.matches.slice(0, 5).map((match) => match.text.trim()).filter(Boolean);
+  const topMatches = searchResult.matches.slice(0, 5);
+  const topChunks = topMatches.map((match) => match.text.trim()).filter(Boolean);
+  const sourceChunkIds = topMatches.map((match) => new Types.ObjectId(match.chunkId));
 
   if (topChunks.length === 0) {
+    await createConversation({
+      userId,
+      question: normalizedQuestion,
+      answer: NO_ANSWER_MESSAGE,
+      sourceChunkIds: [],
+    });
+
     return { answer: NO_ANSWER_MESSAGE };
   }
 
   const prompt = buildPrompt(normalizedQuestion, topChunks);
   const answer = await chatProvider.generateResponse(prompt);
+
+  await createConversation({
+    userId,
+    question: normalizedQuestion,
+    answer,
+    sourceChunkIds,
+  });
 
   return { answer };
 };
